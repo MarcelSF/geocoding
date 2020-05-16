@@ -10,5 +10,25 @@
   <%= @flat.address %>
 </p>
 
+<h2>
+  <%= pluralize @flat.reviews.size, "review" %>
+</h2>
+
+<%= simple_form_for ([ @flat, @review ]), remote: true do |f| %>
+  <%= f.input :content, as: :text %>
+  <%= f.button :submit %>
+<% end %>
+
+<div id="reviews">
+  <% if @flat.reviews.blank? %>
+    Be the first to leave a review for <%= @flat.name %>
+  <% else %>
+    <% @flat.reviews.each do |review| %>
+      <p><%= review.content %></p>
+       <%= link_to "Delete", review_path(review), method: :delete, remote: true %>
+    <% end %>
+  <% end %>
+</div>
+
 <%= link_to 'Edit', edit_flat_path(@flat) %> |
 <%= link_to 'Back', flats_path %>
